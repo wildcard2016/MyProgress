@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/edtTxt1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/chips_edittext_bg"
+    android:drawablePadding="2dp"
+    android:drawableRight="@drawable/cancel_image"
+    android:padding="8dp"
+    android:shadowColor="#ffffff"
+    android:shadowDy="1"
+    android:fontFamily="sans-serif-regular"
+    android:shadowRadius="0.01"
+    android:textColor="#000000"
+    android:textSize="18dp"
+    android:textStyle="bold" />

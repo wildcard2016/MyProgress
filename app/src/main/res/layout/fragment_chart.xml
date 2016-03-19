@@ -1,0 +1,95 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="wildcard.android.com.myprogress.ChartFragment"
+    android:orientation="vertical">
+
+    <com.github.mikephil.charting.charts.PieChart xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/piechart"
+        android:layout_width="match_parent"
+        android:layout_height="180dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Tasks Accomplished"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="25"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@color/colorPrimaryLight" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Percentage of tasks finished per day"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Average 50% per day"/>
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/barchart" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@color/colorPrimaryLight" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Trophies"
+            android:textSize="24dp"
+            android:textColor="#f0873a"
+            android:layout_gravity="center"/>
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp">
+                <ImageView
+                    android:layout_width="@dimen/trophies_width"
+                    android:layout_height="@dimen/trophies_height"
+                    android:src="@drawable/trophies5"/>
+                <ImageView
+                    android:layout_width="@dimen/trophies_width"
+                    android:layout_height="@dimen/trophies_height"
+                    android:src="@drawable/trophies10"/>
+                <ImageView
+                    android:layout_width="@dimen/trophies_width"
+                    android:layout_height="@dimen/trophies_height"
+                    android:src="@drawable/trophies20"/>
+                <ImageView
+                    android:layout_width="@dimen/trophies_width"
+                    android:layout_height="@dimen/trophies_height"
+                    android:src="@drawable/trophies30"/>
+                <ImageView
+                    android:layout_width="@dimen/trophies_width"
+                    android:layout_height="@dimen/trophies_height"
+                    android:src="@drawable/trophies50"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+</LinearLayout>

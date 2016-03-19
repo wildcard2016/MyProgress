@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="108dp"
+    android:background="#66aaff"
+    android:id="@+id/tasks_history" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="#ffffff" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:orientation="vertical"
+        android:id="@+id/background_light"
+        android:background="#ffffff"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp">
+        <TextView
+            android:id="@+id/task_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="6dp"
+            android:text="Read 1Q84"
+            android:fontFamily="sans-serif-regular"
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimaryText"/>
+        <TextView
+            android:id="@+id/task_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="-18dp"
+            android:text="19%"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14dp"/>
+        <ProgressBar
+            android:layout_marginTop="-8dp"
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/progressbar_height"
+            style="@style/LinearProgress2"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="center"
+            android:indeterminate="false"
+            android:progress="79" />
+        <TextView
+            android:id="@+id/period"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="10dp"
+            android:text="19 Mar 2016 - 20 Apr 2016"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="14dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_gravity="bottom"
+        android:background="#ffffff" />
+</FrameLayout>
