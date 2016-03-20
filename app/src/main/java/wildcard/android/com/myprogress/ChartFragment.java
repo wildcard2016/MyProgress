@@ -1,8 +1,10 @@
 package wildcard.android.com.myprogress;
 
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +22,12 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.DefaultValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -33,6 +38,10 @@ public class ChartFragment extends Fragment {
 
     private PieChart pieChart;
     private BarChart barChart;
+    private SharedPreferences sharedPreferences;
+
+    private ArrayList<String> tags;
+
     private static final String TAG = "Chart Fragment";
 
     public ChartFragment() {
@@ -43,6 +52,8 @@ public class ChartFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        tags = MyUtils.getArr(sharedPreferences, "Tags");
         View v = inflater.inflate(R.layout.fragment_chart, container, false);
         setupUIs(v);
         return v;
@@ -74,16 +85,34 @@ public class ChartFragment extends Fragment {
 
         ArrayList<Entry> yVals1 = new ArrayList<>();
 
-        for (int i = 0; i < count + 1; i++) {
-            yVals1.add(new Entry((float) (Math.random() * mult) * mult / 5, i));
-        }
-
         ArrayList<String> xVals = new ArrayList<>();
+        int[] nums = new int[5];
 
         String[] mParties = {"Work", "Study", "Social", "Travel", "Read"};
 
-        for (int i = 0; i < count + 1; i++) {
-            xVals.add(mParties[i % mParties.length]);
+        for (int i = 0; i < tags.size(); i++) {
+            switch (tags.get(i)) {
+                case "work":
+                    nums[0]++; break;
+                case "study":
+                    nums[1]++; break;
+                case "social":
+                    nums[2]++; break;
+                case "travel":
+                    nums[3]++; break;
+                case "read":
+                    nums[4]++; break;
+                default:
+                    nums[0]++; break;
+            }
+        }
+
+        for (int i = 0; i < 5; i++) {
+            yVals1.add(new Entry(nums[i], i));
+        }
+
+        for (int i = 0; i < 5; i++) {
+            xVals.add(mParties[i]);
         }
 
         PieDataSet dataSet = new PieDataSet(yVals1, "Task Accomplished");
@@ -99,6 +128,12 @@ public class ChartFragment extends Fragment {
         PieData data = new PieData(xVals, dataSet);
         data.setValueTextSize(11f);
         data.setValueTextColor(Color.WHITE);
+        data.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return String.valueOf((int)value);
+            }
+        });
         pieChart.setData(data);
         pieChart.highlightValue(null);
         pieChart.invalidate();
@@ -127,7 +162,7 @@ public class ChartFragment extends Fragment {
 
     private void setBarChartData(int count, float range) {
         ArrayList<String> xVals = new ArrayList<>();
-        String[] mMonths = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        String[] mMonths = {"Mar 1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"};
         for (int i = 0; i < count; i++) {
             xVals.add(mMonths[i % 12]);
         }

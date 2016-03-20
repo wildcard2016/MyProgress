@@ -52,6 +52,7 @@ public class HomeFragment extends Fragment {
     private FloatingActionButton floatingActionButton;
     private MyAdapter adapter;
     private ArrayList<String> listViewElements;
+    private ArrayList<String> listViewElements_tag;
     private ArrayList<String> items;
     private ArrayList<String> tags;
     private ArrayList<String> start;
@@ -62,7 +63,6 @@ public class HomeFragment extends Fragment {
     public HomeFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,13 +103,17 @@ public class HomeFragment extends Fragment {
         floatingActionButton.attachToListView(listView);
 
         listViewElements = new ArrayList<>();
+        listViewElements_tag = new ArrayList<>();
         items = MyUtils.getArr(sharedPreferences, "Names");
         tags = MyUtils.getArr(sharedPreferences, "Tags");
         start = MyUtils.getArr(sharedPreferences, "Start");
         end = MyUtils.getArr(sharedPreferences, "End");
 
         for (int i = 1; i < items.size(); i++) {
-            listViewElements.add(items.get(i));
+            if (MyUtils.searchToday(start.get(i) + " - " + end.get(i))) {
+                listViewElements.add(items.get(i));
+                listViewElements_tag.add(tags.get(i));
+            }
         }
 
         adapter = new MyAdapter();
@@ -151,7 +155,7 @@ public class HomeFragment extends Fragment {
                 textView.setText(schedule);
 
                 frameLayout = (FrameLayout) v.findViewById(R.id.tag_container);
-                frameLayout.setBackgroundColor(getColor(tags.get(i + 1).toLowerCase()));
+                frameLayout.setBackgroundColor(getColor(listViewElements_tag.get(i).toLowerCase()));
             }
             return v;
         }

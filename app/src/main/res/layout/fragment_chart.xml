@@ -94,7 +94,7 @@
                 <ImageView
                     android:layout_width="@dimen/trophies_width"
                     android:layout_height="@dimen/trophies_height"
-                    android:src="@drawable/trophies20"/>
+                    android:src="@drawable/trophies20_gold"/>
                 <ImageView
                     android:layout_width="@dimen/trophies_width"
                     android:layout_height="@dimen/trophies_height"

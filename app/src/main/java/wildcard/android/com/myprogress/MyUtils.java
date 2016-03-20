@@ -2,6 +2,7 @@ package wildcard.android.com.myprogress;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,7 @@ import java.util.Scanner;
  * Created by Shiken Zijian Xu on 2016/03/20.
  */
 public class MyUtils {
+    private static final String TAG = "MyUtils";
     public static ArrayList<String> StrToArr(String str) {
         String[] items = str.split(",");
         ArrayList<String> arrayList = new ArrayList<>();
@@ -96,29 +98,54 @@ public class MyUtils {
         }
     }
 
-    public boolean searchToday(String period) {
-        Date date = new Date(System.currentTimeMillis());
-        String today = new SimpleDateFormat("dd MMM yyyy", Locale.US).format(date);
-        String[] dates = period.split(" - ");
-        Scanner scan = new Scanner(today);
-        int thisDay = scan.nextInt();
-        String thisMonth = scan.next();
-        scan = new Scanner(dates[0]);
-        int startDay = scan.nextInt();
-        String startMonth = scan.next();
-        scan = new Scanner(dates[1]);
-        int endDay = scan.nextInt();
-        String endMonth = scan.next();
-        if (thisMonth.equals(startMonth) && startDay <= thisDay) {
-            if (! thisMonth.equals(endMonth)) return true;
-            else if (thisDay <= endDay) return  true;
-            else return false;
-        }else if (startMonth.equals("Feb") && thisMonth.equals(endMonth) && thisDay <= endDay) {
-            return true;
-        }else {
+    public static boolean searchToday(String period) {
+        try {
+            Date date = new Date(System.currentTimeMillis());
+            String today = new SimpleDateFormat("dd MMM yyyy", Locale.US).format(date);
+            String[] dates = period.split(" - ");
+            Log.d(TAG, dates[0] + " " + dates[1]);
+            Scanner scan = new Scanner(today);
+            int thisDay = scan.nextInt();
+            String thisMonth = scan.next();
+            scan = new Scanner(dates[0]);
+            int startDay = scan.nextInt();
+            String startMonth = scan.next();
+            scan = new Scanner(dates[1]);
+            int endDay = scan.nextInt();
+            String endMonth = scan.next();
+            if (thisMonth.equals(startMonth) && startDay <= thisDay) {
+                if (! thisMonth.equals(endMonth)) return true;
+                else if (thisDay <= endDay) return  true;
+                else return false;
+            }else if (startMonth.equals("Feb") && thisMonth.equals(endMonth) && thisDay <= endDay) {
+                return true;
+            }else {
+                return false;
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, period.toString());
+        }
+        return false;
+        // not correct; just a temporary method
+    }
+
+    public static boolean deprecated(String endTime) {
+        try {
+            Date date = new Date(System.currentTimeMillis());
+            String today = new SimpleDateFormat("dd MMM yyyy", Locale.US).format(date);
+            Scanner scan = new Scanner(today);
+            int thisDay = scan.nextInt();
+            String thisMonth = scan.next();
+            scan = new Scanner(endTime);
+            int endDay = scan.nextInt();
+            String endMonth = scan.next();
+            if (endMonth.equals("Feb")) return true;
+            if (endMonth.equals(thisMonth) && endDay < thisDay) return true;
+            return false;
+        }catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
-
-        // not correct; just a temporary method
     }
 }

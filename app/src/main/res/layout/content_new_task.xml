@@ -134,11 +134,12 @@
             android:gravity="center"
             android:textColor="#000000"
             android:textSize="16dp" />
-        <EditText
+        <Spinner
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:hint="@string/Unit"
+            android:layout_marginTop="1dp"
+            android:id="@+id/spinner"
             android:textAlignment="center"/>
     </LinearLayout>
 

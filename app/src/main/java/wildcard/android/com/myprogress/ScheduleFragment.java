@@ -42,6 +42,7 @@ public class ScheduleFragment extends Fragment {
     private ArrayList<String> listViewElements_tag;
     private ArrayList<String> listViewElements_start;
     private ArrayList<String> listViewElements_end;
+    private ArrayList<String> listViewElements_progress;
 
     private ArrayList<String> items;
     private ArrayList<String> tags;
@@ -83,6 +84,7 @@ public class ScheduleFragment extends Fragment {
         tags = MyUtils.getArr(sharedPreferences, "Tags");
         start = MyUtils.getArr(sharedPreferences, "Start");
         end = MyUtils.getArr(sharedPreferences, "End");
+        progress = MyUtils.getArr(sharedPreferences, "Progress");
 
         resetListView();
 
@@ -103,12 +105,14 @@ public class ScheduleFragment extends Fragment {
         listViewElements_tag = new ArrayList<>();
         listViewElements_start = new ArrayList<>();
         listViewElements_end = new ArrayList<>();
+        listViewElements_progress = new ArrayList<>();
         for (int i = 1; i < length; i++) {
             if (items.get(i).toLowerCase().contains(newText.toLowerCase())) {
                 listViewElements.add(items.get(i));
                 listViewElements_tag.add(tags.get(i));
                 listViewElements_start.add(start.get(i));
                 listViewElements_end.add(end.get(i));
+                listViewElements_progress.add(progress.get(i));
             }
         }
         adapter = new MyAdapter();
@@ -120,11 +124,13 @@ public class ScheduleFragment extends Fragment {
         listViewElements_tag = new ArrayList<>();
         listViewElements_start = new ArrayList<>();
         listViewElements_end = new ArrayList<>();
+        listViewElements_progress = new ArrayList<>();
         for (int i = 1; i < items.size(); i++) {
             listViewElements.add(items.get(i));
             listViewElements_tag.add(tags.get(i));
             listViewElements_start.add(start.get(i));
             listViewElements_end.add(end.get(i));
+            listViewElements_progress.add(progress.get(i));
         }
         adapter = new MyAdapter();
         listView.setAdapter(adapter);
@@ -208,6 +214,8 @@ public class ScheduleFragment extends Fragment {
 
                 progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
                 progressBar.setScaleY(2f);
+                progressBar.setProgress(Integer.valueOf(listViewElements_progress.get(i)));
+                progress.setText(Integer.valueOf(listViewElements_progress.get(i)) + "%");
 
                 backgroundLight = (LinearLayout) v.findViewById(R.id.background_light);
 
@@ -219,6 +227,10 @@ public class ScheduleFragment extends Fragment {
 
                 taskName.setText(name);
                 period.setText(start + " - " + end);
+
+                if (MyUtils.deprecated(end)) {
+                    tag = "old";
+                }
 
                 setColor(tag.toLowerCase(), frameLayout, taskName, period, progress, backgroundLight);
             }

@@ -20,4 +20,11 @@
         <item>Travel</item>
     </string-array>
     <string name="title_activity_splash_screen">SplashScreen</string>
+
+    <string-array name="units_array">
+        <item>Hour</item>
+        <item>Day</item>
+        <item>Week</item>
+        <item>Month</item>
+    </string-array>
 </resources>

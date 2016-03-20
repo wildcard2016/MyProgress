@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> tag = new ArrayList<>();
         ArrayList<String> progress = new ArrayList<>();
 
-        int num = 20;
+        int num = 25;
         Random random = new Random();
         long startTime;
         long endTime;

@@ -21,6 +21,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -47,6 +48,7 @@ public class NewTask extends AppCompatActivity implements View.OnClickListener {
     private ImageView cancel;
 
     private SimpleDateFormat dateFormatter;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,11 @@ public class NewTask extends AppCompatActivity implements View.OnClickListener {
         StartDate = (EditText) findViewById(R.id.start_date);
         StartDate.setInputType(InputType.TYPE_NULL);
         StartDate.requestFocus();
+        spinner = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.units_array, android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         EndDate = (EditText) findViewById(R.id.end_date);
         EndDate.setInputType(InputType.TYPE_NULL);
