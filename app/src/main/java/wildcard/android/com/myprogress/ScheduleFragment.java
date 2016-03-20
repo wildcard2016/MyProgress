@@ -2,8 +2,11 @@ package wildcard.android.com.myprogress;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,6 +39,17 @@ public class ScheduleFragment extends Fragment {
     private FloatingActionButton floatingActionButton;
     private MyAdapter adapter;
     private ArrayList<String> listViewElements;
+    private ArrayList<String> listViewElements_tag;
+    private ArrayList<String> listViewElements_start;
+    private ArrayList<String> listViewElements_end;
+
+    private ArrayList<String> items;
+    private ArrayList<String> tags;
+    private ArrayList<String> start;
+    private ArrayList<String> end;
+    private ArrayList<String> progress;
+
+    private SharedPreferences sharedPreferences;
 
     public ScheduleFragment() {
         // Required empty public constructor
@@ -52,23 +66,25 @@ public class ScheduleFragment extends Fragment {
     }
 
     private void setupUIs(View v) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+
         searchView = (SearchView) v.findViewById(R.id.search_view);
         android.support.v7.widget.SearchView.SearchAutoComplete searchAutoComplete = (android.support.v7.widget.SearchView.SearchAutoComplete)
                 searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        setListeners();
         listView = (ListView) v.findViewById(R.id.list_view2);
         floatingActionButton = (FloatingActionButton) v.findViewById(R.id.fab2);
         listView.setDivider(null);
         floatingActionButton.attachToListView(listView);
 
-        listViewElements = new ArrayList<>();
+        setListeners();
 
-        for (int i = 0; i < 15; i++) {
-            listViewElements.add("Read Android Textbook" + i);
-        }
+        // sharedPreferences
+        items = MyUtils.getArr(sharedPreferences, "Names");
+        tags = MyUtils.getArr(sharedPreferences, "Tags");
+        start = MyUtils.getArr(sharedPreferences, "Start");
+        end = MyUtils.getArr(sharedPreferences, "End");
 
-        adapter = new MyAdapter();
-        listView.setAdapter(adapter);
+        resetListView();
 
         registerForContextMenu(listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -81,6 +97,39 @@ public class ScheduleFragment extends Fragment {
         });
     }
 
+    private void updateListView(String newText) {
+        int length = items.size();
+        listViewElements = new ArrayList<>();
+        listViewElements_tag = new ArrayList<>();
+        listViewElements_start = new ArrayList<>();
+        listViewElements_end = new ArrayList<>();
+        for (int i = 1; i < length; i++) {
+            if (items.get(i).toLowerCase().contains(newText.toLowerCase())) {
+                listViewElements.add(items.get(i));
+                listViewElements_tag.add(tags.get(i));
+                listViewElements_start.add(start.get(i));
+                listViewElements_end.add(end.get(i));
+            }
+        }
+        adapter = new MyAdapter();
+        listView.setAdapter(adapter);
+    }
+
+    private void resetListView() {
+        listViewElements = new ArrayList<>();
+        listViewElements_tag = new ArrayList<>();
+        listViewElements_start = new ArrayList<>();
+        listViewElements_end = new ArrayList<>();
+        for (int i = 1; i < items.size(); i++) {
+            listViewElements.add(items.get(i));
+            listViewElements_tag.add(tags.get(i));
+            listViewElements_start.add(start.get(i));
+            listViewElements_end.add(end.get(i));
+        }
+        adapter = new MyAdapter();
+        listView.setAdapter(adapter);
+    }
+
     private void setListeners() {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -91,6 +140,11 @@ public class ScheduleFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String s) {
                 Log.d(TAG, "onQueryTextChange");
+                if (TextUtils.isEmpty(s)) {
+                    resetListView();
+                } else {
+                    updateListView(s);
+                }
                 return true;
             }
         });
@@ -100,6 +154,14 @@ public class ScheduleFragment extends Fragment {
             public void onClick(View v) {
                 searchView.setIconified(false);
                 //Click to enter keywords
+            }
+        });
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), NewTask.class);
+                startActivity(intent);
             }
         });
     }
@@ -138,9 +200,8 @@ public class ScheduleFragment extends Fragment {
                 v = inflater.inflate(R.layout.list_content2, viewGroup, false);
             }
             String schedule = (String) getItem(i);
-            if (schedule != null) {
+            if (! schedule.equals("fake")) {
                 taskName = (TextView) v.findViewById(R.id.task_name);
-                taskName.setText(schedule);
 
                 period = (TextView) v.findViewById(R.id.period);
                 progress = (TextView) v.findViewById(R.id.task_progress);
@@ -151,71 +212,31 @@ public class ScheduleFragment extends Fragment {
                 backgroundLight = (LinearLayout) v.findViewById(R.id.background_light);
 
                 frameLayout = (FrameLayout) v.findViewById(R.id.tasks_history);
-                if (i % 5 == 0) {
-                    setColor("work", frameLayout, taskName, period, progress, backgroundLight);
-                }else if (i % 5 == 1) {
-                    setColor("study", frameLayout, taskName, period, progress, backgroundLight);
-                }else if (i % 5 == 2) {
-                    setColor("social", frameLayout, taskName, period, progress, backgroundLight);
-                }else if (i % 5 == 3) {
-                    setColor("read", frameLayout, taskName, period, progress, backgroundLight);
-                }else {
-                    setColor("travel", frameLayout, taskName, period, progress, backgroundLight);
-                }
-                if (i > 10) {
-                    setColor("old", frameLayout, taskName, period, progress, backgroundLight);
-                }
+                String tag = listViewElements_tag.get(i);
+                String name = listViewElements.get(i);
+                String start = listViewElements_start.get(i);
+                String end = listViewElements_end.get(i);
+
+                taskName.setText(name);
+                period.setText(start + " - " + end);
+
+                setColor(tag.toLowerCase(), frameLayout, taskName, period, progress, backgroundLight);
             }
             return v;
         }
 
         private void setColor(String color, FrameLayout frameLayout, TextView taskName, TextView period,
                               TextView progress, LinearLayout linearLayout) {
-            int colorCode = getColor(color);
-            int lightColorCode = getLightColor(color);
-            frameLayout.setBackgroundColor(colorCode);
+            int colorCode = Color.WHITE; //MyUtils.getColor(color);
+            if (color.equals("old")) {
+                colorCode = Color.parseColor("#9d9d9d");
+            }
+            int lightColorCode = MyUtils.getLColor(color);
+            frameLayout.setBackgroundColor(lightColorCode);
             taskName.setTextColor(colorCode);
             period.setTextColor(colorCode);
             progress.setTextColor(colorCode);
             linearLayout.setBackgroundColor(lightColorCode);
-        }
-    }
-
-    private int getColor(String tag) {
-        switch (tag) {
-            case "work":
-                return Color.parseColor("#5c6bc0");
-            case "study":
-                return Color.parseColor("#66bb6a");
-            case "social":
-                return Color.parseColor("#ffa726");
-            case "read":
-                return Color.parseColor("#26a69a");
-            case "travel":
-                return Color.parseColor("#ef5350");
-            case "old":
-                return Color.parseColor("#aca6a6");
-            default:
-                return 0;
-        }
-    }
-
-    private int getLightColor(String tag) {
-        switch (tag) {
-            case "work":
-                return Color.parseColor("#c5cae9");
-            case "study":
-                return Color.parseColor("#c8e6c9");
-            case "social":
-                return Color.parseColor("#ffe082");
-            case "read":
-                return Color.parseColor("#b2dfbb");
-            case "travel":
-                return Color.parseColor("#ffcdd2");
-            case "old":
-                return Color.parseColor("#f5f5f5");
-            default:
-                return 0;
         }
     }
 }

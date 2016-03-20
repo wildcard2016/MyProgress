@@ -4,6 +4,7 @@ package wildcard.android.com.myprogress;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Display;
@@ -35,6 +37,8 @@ import java.util.ArrayList;
  */
 public class HomeFragment extends Fragment {
 
+    private static final String TAG = "Home Fragment";
+
     private TextView tasksAccomplished;
     private TextView thisMonth;
     private TextView thisWeek;
@@ -48,6 +52,12 @@ public class HomeFragment extends Fragment {
     private FloatingActionButton floatingActionButton;
     private MyAdapter adapter;
     private ArrayList<String> listViewElements;
+    private ArrayList<String> items;
+    private ArrayList<String> tags;
+    private ArrayList<String> start;
+    private ArrayList<String> end;
+
+    private SharedPreferences sharedPreferences;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -72,6 +82,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupUIs(View v) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+
         tasksAccomplished = (TextView) v.findViewById(R.id.tasks_accomplished);
         thisMonth = (TextView) v.findViewById(R.id.this_month);
         thisWeek = (TextView) v.findViewById(R.id.this_week);
@@ -91,9 +103,13 @@ public class HomeFragment extends Fragment {
         floatingActionButton.attachToListView(listView);
 
         listViewElements = new ArrayList<>();
+        items = MyUtils.getArr(sharedPreferences, "Names");
+        tags = MyUtils.getArr(sharedPreferences, "Tags");
+        start = MyUtils.getArr(sharedPreferences, "Start");
+        end = MyUtils.getArr(sharedPreferences, "End");
 
-        for (int i = 0; i < 15; i++) {
-            listViewElements.add("sample schedule data " + i);
+        for (int i = 1; i < items.size(); i++) {
+            listViewElements.add(items.get(i));
         }
 
         adapter = new MyAdapter();
@@ -135,17 +151,7 @@ public class HomeFragment extends Fragment {
                 textView.setText(schedule);
 
                 frameLayout = (FrameLayout) v.findViewById(R.id.tag_container);
-                if (i % 5 == 0) {
-                    frameLayout.setBackgroundColor(Color.parseColor("#5c6bc0"));
-                }else if (i % 5 == 1) {
-                    frameLayout.setBackgroundColor(Color.parseColor("#ef5350"));
-                }else if (i % 5 == 2) {
-                    frameLayout.setBackgroundColor(Color.parseColor("#66bb6a"));
-                }else if (i % 5 == 3) {
-                    frameLayout.setBackgroundColor(Color.parseColor("#ffa726"));
-                }else {
-                    frameLayout.setBackgroundColor(Color.parseColor("#26a69a"));
-                }
+                frameLayout.setBackgroundColor(getColor(tags.get(i + 1).toLowerCase()));
             }
             return v;
         }

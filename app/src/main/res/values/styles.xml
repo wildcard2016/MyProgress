@@ -31,7 +31,7 @@
     </style>
 
     <style name="LinearProgress2" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
-        <item name="android:progressTint">#ff8f71</item>
-        <item name="android:progressBackgroundTint">#cbd5d9</item>
+        <item name="android:progressTint">#ffe970</item>
+        <item name="android:progressBackgroundTint">#ffffff</item>
     </style>
 </resources>

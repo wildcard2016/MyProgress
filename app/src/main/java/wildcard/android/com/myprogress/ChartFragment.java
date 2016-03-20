@@ -66,7 +66,7 @@ public class ChartFragment extends Fragment {
         pieChart.setRotationEnabled(false);
         pieChart.setHighlightPerTapEnabled(true);
         pieChart.getLegend().setEnabled(false);
-        setPieChartData(3, 100);
+        setPieChartData(4, 100);
     }
 
     private void setPieChartData(int count, float range) {
@@ -80,7 +80,7 @@ public class ChartFragment extends Fragment {
 
         ArrayList<String> xVals = new ArrayList<>();
 
-        String[] mParties = {"Read", "Math", "Work", "Physics", "Informatics"};
+        String[] mParties = {"Work", "Study", "Social", "Travel", "Read"};
 
         for (int i = 0; i < count + 1; i++) {
             xVals.add(mParties[i % mParties.length]);
@@ -88,24 +88,12 @@ public class ChartFragment extends Fragment {
 
         PieDataSet dataSet = new PieDataSet(yVals1, "Task Accomplished");
         dataSet.setSliceSpace(3f);
-        dataSet.setSelectionShift(5f);
+        dataSet.setSelectionShift(6f);
 
         ArrayList<Integer> colors = new ArrayList<>();
-        for (int c: ColorTemplate.VORDIPLOM_COLORS) {
-            colors.add(c);
+        for (int i = 0; i < mParties.length; i++) {
+            colors.add(MyUtils.getLColor(mParties[i].toLowerCase()));
         }
-        for (int c: ColorTemplate.JOYFUL_COLORS) {
-            colors.add(c);
-        }
-        for (int c: ColorTemplate.COLORFUL_COLORS) {
-            colors.add(c);
-        }
-        for (int c: ColorTemplate.LIBERTY_COLORS) {
-            colors.add(c);
-        }for (int c: ColorTemplate.PASTEL_COLORS) {
-            colors.add(c);
-        }
-        colors.add(ColorTemplate.getHoloBlue());
         dataSet.setColors(colors);
 
         PieData data = new PieData(xVals, dataSet);
@@ -123,6 +111,8 @@ public class ChartFragment extends Fragment {
         barChart.setPinchZoom(false);
         barChart.setDrawGridBackground(false);
         barChart.getLegend().setEnabled(false);
+        barChart.disableScroll();
+        barChart.setPinchZoom(false);
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
@@ -151,6 +141,8 @@ public class ChartFragment extends Fragment {
         BarDataSet set1 = new BarDataSet(yVals1, "DataSet");
         set1.setBarSpacePercent(35f);
         set1.setDrawValues(false);
+        set1.setColor(Color.parseColor("#b3d465"));
+        set1.setValueTextColor(Color.parseColor("#7e9d35"));
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
 

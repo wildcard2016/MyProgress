@@ -1,8 +1,12 @@
 package wildcard.android.com.myprogress;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +24,7 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -32,6 +37,8 @@ public class NewTask extends AppCompatActivity implements View.OnClickListener {
     private EditText newTask;
     private EditText StartDate;
     private EditText EndDate;
+
+    SharedPreferences sharedPreferences;
 
     private DatePickerDialog StartDatePickerDialog;
     private DatePickerDialog EndDatePickerDialog;
@@ -48,7 +55,9 @@ public class NewTask extends AppCompatActivity implements View.OnClickListener {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
 
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.JAPAN);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        dateFormatter = new SimpleDateFormat("dd MMM yyyy", Locale.US);
 
         findViewById();
 
@@ -151,5 +160,45 @@ public class NewTask extends AppCompatActivity implements View.OnClickListener {
                 startActivity(intent);
             }
         });
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String taskName = newTask.getText().toString();
+                String startTime = StartDate.getText().toString();
+                String endTime = EndDate.getText().toString();
+                String tags = mu.getText().toString();
+                String tag = tags.split(",")[0];
+                Log.d(TAG, tags);
+
+                if (hasBlank(taskName, startTime, endTime, tags)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NewTask.this);
+                    builder.setMessage("Oops! Some fields are missing");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    builder.show();
+                }else {
+                    MyUtils.AddToPref(sharedPreferences, "Names", taskName);
+                    MyUtils.AddToPref(sharedPreferences, "Start", startTime);
+                    MyUtils.AddToPref(sharedPreferences, "End", endTime);
+                    MyUtils.AddToPref(sharedPreferences, "Tags", tag);
+                    Intent intent = new Intent(NewTask.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    private boolean hasBlank(String... args) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("")) {
+                return true;
+            }
+        }
+        return false;
     }
 }
