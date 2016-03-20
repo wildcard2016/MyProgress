@@ -10,7 +10,9 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -257,5 +259,21 @@ public class ScheduleFragment extends Fragment {
             progress.setTextColor(colorCode);
             linearLayout.setBackgroundColor(lightColorCode);
         }
+    }
+
+    private static final int CONTEXT_MENU_EDIT = 0;
+    private static final int CONTEXT_MENU_DELETE = 1;
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo info) {
+        super.onCreateContextMenu(menu, v, info);
+        searchView.setIconified(true);
+        menu.add(0, CONTEXT_MENU_EDIT, 0, "Edit");
+        menu.add(0, CONTEXT_MENU_DELETE, 0, "Delete");
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        return false;
     }
 }

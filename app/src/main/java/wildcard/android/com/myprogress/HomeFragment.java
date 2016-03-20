@@ -15,8 +15,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -101,6 +103,7 @@ public class HomeFragment extends Fragment {
         listView.setDivider(null);
         floatingActionButton = (FloatingActionButton) v.findViewById(R.id.fab);
         floatingActionButton.attachToListView(listView);
+        registerForContextMenu(listView);
 
         listViewElements = new ArrayList<>();
         listViewElements_tag = new ArrayList<>();
@@ -176,5 +179,20 @@ public class HomeFragment extends Fragment {
             default:
                 return 0;
         }
+    }
+
+    private static final int CONTEXT_MENU_EDIT = 0;
+    private static final int CONTEXT_MENU_DELETE = 1;
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo info) {
+        super.onCreateContextMenu(menu, v, info);
+        menu.add(0, CONTEXT_MENU_EDIT, 0, "Edit");
+        menu.add(0, CONTEXT_MENU_DELETE, 0, "Delete");
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        return false;
     }
 }
