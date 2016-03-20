@@ -193,6 +193,7 @@ public class NewTask extends AppCompatActivity implements View.OnClickListener {
                     MyUtils.AddToPref(sharedPreferences, "Start", startTime);
                     MyUtils.AddToPref(sharedPreferences, "End", endTime);
                     MyUtils.AddToPref(sharedPreferences, "Tags", tag);
+                    MyUtils.AddToPref(sharedPreferences, "Progress", "33");
                     Intent intent = new Intent(NewTask.this, MainActivity.class);
                     startActivity(intent);
                 }

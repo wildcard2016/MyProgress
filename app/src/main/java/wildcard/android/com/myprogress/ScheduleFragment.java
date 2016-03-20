@@ -214,8 +214,15 @@ public class ScheduleFragment extends Fragment {
 
                 progressBar = (ProgressBar) v.findViewById(R.id.progress_bar);
                 progressBar.setScaleY(2f);
-                progressBar.setProgress(Integer.valueOf(listViewElements_progress.get(i)));
-                progress.setText(Integer.valueOf(listViewElements_progress.get(i)) + "%");
+
+                try {
+                    progressBar.setProgress(Integer.valueOf(listViewElements_progress.get(i)));
+                    progress.setText(Integer.valueOf(listViewElements_progress.get(i)) + "%");
+                }catch (Exception e) {
+                    e.printStackTrace();
+                    progressBar.setProgress(Integer.valueOf(0));
+                    progress.setText(Integer.valueOf(0) + "%");
+                }
 
                 backgroundLight = (LinearLayout) v.findViewById(R.id.background_light);
 
